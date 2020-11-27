@@ -1,5 +1,5 @@
 # jig
-Tired of making sure that everyone has the correct tools installed on their machine. `jig` will read the jig.yaml file and check your `$PATH` environment variable for installed tools. 
+Tired of making sure that everyone has the correct tools installed on their machine regardless of OS? `jig` will read the jig.yaml file and check your `$PATH` environment variable for installed tools. 
 
 ## How To Use
 
