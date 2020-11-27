@@ -6,6 +6,7 @@ Tired of making sure that everyone has the correct tools installed on their mach
 Note: Currently, there are no releases, so you have to build this from scratch.
 
 1. clone the repo
+1. make sure you have at least go 1.14 installed
 1. `make build`
 1. `./jig`
 
