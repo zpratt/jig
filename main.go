@@ -1,11 +1,13 @@
 package main
 
 import (
+	"github.com/zpratt/jig/adapters"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
+	"runtime"
 )
 
 type JigConfig struct {
@@ -14,6 +16,13 @@ type JigConfig struct {
 
 func main() {
 	var notInstalled []string
+	desiredState := func() DesiredState {
+		if runtime.GOOS == "darwin" {
+			return DesiredState{PlatformAdapter: adapters.Darwin{}}
+		}
+		// TODO: update factory to include a windows version
+		return DesiredState{PlatformAdapter: adapters.Darwin{}}
+	}()
 
 	jigConfig := parseConfig()
 
@@ -27,7 +36,7 @@ func main() {
 
 	if len(notInstalled) > 0 {
 		for _, notInstalledTool := range notInstalled {
-			log.Printf("%s is not installed", notInstalledTool)
+			desiredState.InstallPackage(notInstalledTool)
 		}
 	} else {
 		log.Printf("all tools installed")
