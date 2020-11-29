@@ -15,24 +15,9 @@ type JigConfig struct {
 }
 
 func main() {
-	var notInstalled []string
-	desiredState := func() DesiredState {
-		if runtime.GOOS == "darwin" {
-			return DesiredState{PlatformAdapter: adapters.Darwin{}}
-		}
-		// TODO: update factory to include a windows version
-		return DesiredState{PlatformAdapter: adapters.Darwin{}}
-	}()
-
+	desiredState := desiredStateFactory()
 	jigConfig := parseConfig()
-
-	for _, tool := range jigConfig.Tools {
-		_, err := exec.LookPath(tool)
-
-		if err != nil {
-			notInstalled = append(notInstalled, tool)
-		}
-	}
+	notInstalled := findMissingPackages(jigConfig)
 
 	if len(notInstalled) > 0 {
 		for _, notInstalledTool := range notInstalled {
@@ -41,6 +26,19 @@ func main() {
 	} else {
 		log.Printf("all tools installed")
 	}
+}
+
+func findMissingPackages(jigConfig JigConfig) []string {
+	var notInstalled []string
+
+	for _, tool := range jigConfig.Tools {
+		_, err := exec.LookPath(tool)
+
+		if err != nil {
+			notInstalled = append(notInstalled, tool)
+		}
+	}
+	return notInstalled
 }
 
 func parseConfig() JigConfig {
@@ -61,4 +59,12 @@ func parseConfig() JigConfig {
 	}
 
 	return config
+}
+
+func desiredStateFactory() DesiredState {
+	if runtime.GOOS == "darwin" {
+		return DesiredState{PlatformAdapter: adapters.Darwin{}}
+	}
+	// TODO: update factory to include a windows version
+	return DesiredState{PlatformAdapter: adapters.Darwin{}}
 }
