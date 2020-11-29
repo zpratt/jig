@@ -62,9 +62,14 @@ func parseConfig() JigConfig {
 }
 
 func desiredStateFactory() DesiredState {
-	if runtime.GOOS == "darwin" {
-		return DesiredState{PlatformAdapter: adapters.Darwin{}}
+	factories := map[string]func() DesiredState{
+		"darwin": func() DesiredState {
+			return DesiredState{PlatformAdapter: adapters.Darwin{}}
+		},
+		"windows": func() DesiredState {
+			return DesiredState{PlatformAdapter: adapters.Windows{}}
+		},
 	}
-	// TODO: update factory to include a windows version
-	return DesiredState{PlatformAdapter: adapters.Darwin{}}
+
+	return factories[runtime.GOOS]()
 }
