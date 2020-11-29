@@ -61,13 +61,13 @@ func parseConfig() JigConfig {
 	return config
 }
 
-func desiredStateFactory() DesiredState {
-	factories := map[string]func() DesiredState{
-		"darwin": func() DesiredState {
-			return DesiredState{PlatformAdapter: adapters.Darwin{}}
+func desiredStateFactory() *DesiredState {
+	factories := map[string]func() *DesiredState{
+		"darwin": func() *DesiredState {
+			return &DesiredState{PlatformAdapter: adapters.Darwin{}}
 		},
-		"windows": func() DesiredState {
-			return DesiredState{PlatformAdapter: adapters.Windows{}}
+		"windows": func() *DesiredState {
+			return &DesiredState{PlatformAdapter: adapters.Windows{}}
 		},
 	}
 
