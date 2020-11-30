@@ -4,6 +4,7 @@ import (
 	"github.com/zpratt/jig/adapters"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	utilsexec "k8s.io/utils/exec"
 	"log"
 	"os"
 	"os/exec"
@@ -67,7 +68,7 @@ func desiredStateFactory() *DesiredState {
 			return &DesiredState{PlatformAdapter: adapters.Darwin{}}
 		},
 		"windows": func() *DesiredState {
-			return &DesiredState{PlatformAdapter: adapters.Windows{}}
+			return &DesiredState{PlatformAdapter: adapters.NewWindowsAdapter(utilsexec.New())}
 		},
 	}
 

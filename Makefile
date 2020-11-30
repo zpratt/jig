@@ -1,4 +1,5 @@
 build: clean
+	go test ./...
 	go build -a
 
 build-windows: clean
