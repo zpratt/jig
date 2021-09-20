@@ -9,8 +9,8 @@ type Darwin struct{}
 
 func (d Darwin) InstallPackage(packageName string) {
 	d.UpdatePackageList()
-	log.Printf("installing package %s", packageName)
-	// TODO: run brew to install the package
+	log.Printf("installing package %s", packageName
+	exec.Command("brew", "install", packageName)
 	log.Printf("installed package %s", packageName)
 }
 
