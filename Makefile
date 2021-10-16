@@ -1,19 +1,38 @@
-all: test build build-windows test-e2e
+all: test build build-windows build-linux test-e2e
 
-build:
-	go build -a
+BREW_BIN ?= brew
+GO_BIN ?= go # in case you want to run some other version / containerize this run
 
+NAME=jig
+TEST_PACKAGE=bat
+#BASE_DIR=$(shell pwd) # useful to have in case the cwd is needed
+
+.PHONY: build
+build: 
+	$(GO_BIN) build -a -v .
+
+.PHONY: build-windows
 build-windows:
 	GOOS=windows GOARCH=amd64 go build -a
 
+.PHONY: build-linux
+build-windows:
+	GOOS=linux GOARCH=amd64 go build -a
+
+.PHONY: build-all
+build-all: build build-windows build-linux
+
+.PHONY: clean
 clean:
-	go clean -cache
-	go clean
+	$(GO_BIN) clean -cache
+	$(GO_BIN) clean
 
+.PHONY: test
 test: clean
-	go test -v ./...
+	$(GO_BIN) test -v ./...
 
+.PHONY: test-e2e
 test-e2e: clean build
-	brew uninstall hping || echo skip uninstalling hping because it is not installed
+	$(BREW_BIN) uninstall $(TEST_PACKAGE) || echo skip uninstalling hping because it is not installed
 	./jig
-	hping -v
+	$(TEST_PACKAGE) -V
