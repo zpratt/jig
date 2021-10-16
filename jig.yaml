@@ -1,5 +1,3 @@
 ---
 tools:
-  - terraform
-  - docker
-  - foo
+  - hping

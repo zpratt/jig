@@ -1,16 +1,25 @@
 package adapters
 
 import (
+	utilsexec "k8s.io/utils/exec"
 	"log"
 	"os/exec"
 )
 
-type Darwin struct{}
+type Darwin struct {
+	exec utilsexec.Interface
+}
+
+func NewDarwinAdapter(exec utilsexec.Interface) Darwin {
+	return Darwin{
+		exec: exec,
+	}
+}
 
 func (d Darwin) InstallPackage(packageName string) {
 	d.UpdatePackageList()
 	log.Printf("installing package %s", packageName)
-	// TODO: run brew to install the package
+	_, _ = d.exec.Command("brew", "install", packageName).CombinedOutput()
 	log.Printf("installed package %s", packageName)
 }
 
