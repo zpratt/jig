@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/zpratt/jig/internal"
 	"log"
 	"testing"
@@ -8,7 +9,7 @@ import (
 
 func TestWindows_InstallPackage(t *testing.T) {
 	installedPackageManager := "choco"
-	packageToInstall := "somepackage"
+	packageToInstall := gofakeit.LetterN(10)
 	shellOutput := "0"
 
 	command := internal.MakeFakeCommand(shellOutput)
