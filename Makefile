@@ -14,6 +14,6 @@ test: clean
 	go test -v ./...
 
 test-e2e: clean build
-	brew uninstall hping || echo skip uninstalling hping because it is not installed
+	brew uninstall httping || echo skip uninstalling httping because it is not installed
 	./jig
-	hping -v
+	httping -v
