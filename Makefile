@@ -1,4 +1,4 @@
-all: test build build-windows
+all: test build build-windows test-e2e
 
 build:
 	go build -a
@@ -8,7 +8,7 @@ build-windows:
 
 clean:
 	go clean -cache
-	rm -f {jig,jig.exe}
+	go clean
 
 test: clean
 	go test -v ./...
