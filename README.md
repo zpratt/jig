@@ -1,6 +1,7 @@
 # jig
 
 [![Go](https://github.com/zpratt/jig/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/zpratt/jig/actions/workflows/go.yml)
+[![DeepSource](https://deepsource.io/gh/zpratt/jig.svg/?label=active+issues&show_trend=true&token=JVh0vjfvtlSU8toDhk8quj9O)](https://deepsource.io/gh/zpratt/jig/?ref=repository-badge)
 
 Tired of making sure that everyone has the correct tools installed on their machine regardless of OS? `jig` will read the jig.yaml file and check your `$PATH` environment variable for installed tools. 
 
