@@ -63,12 +63,14 @@ func parseConfig() JigConfig {
 }
 
 func desiredStateFactory() *DesiredState {
+	execInst := utilsexec.New()
+
 	factories := map[string]func() *DesiredState{
 		"darwin": func() *DesiredState {
-			return &DesiredState{PlatformAdapter: adapters.Darwin{}}
+			return &DesiredState{PlatformAdapter: adapters.NewDarwinAdapter(execInst)}
 		},
 		"windows": func() *DesiredState {
-			return &DesiredState{PlatformAdapter: adapters.NewWindowsAdapter(utilsexec.New())}
+			return &DesiredState{PlatformAdapter: adapters.NewWindowsAdapter(execInst)}
 		},
 	}
 

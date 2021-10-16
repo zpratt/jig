@@ -24,7 +24,7 @@ func (w WindowsAdapter) InstallPackage(packageName string) {
 		log.Fatalf("no supported package managers installed")
 	}
 
-	w.exec.Command(packageManagers[0], "install", packageName).CombinedOutput()
+	_, _ = w.exec.Command(packageManagers[0], "install", packageName).CombinedOutput()
 
 	log.Printf("installing package %s", packageName)
 }
