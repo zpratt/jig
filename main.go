@@ -1,14 +1,15 @@
 package main
 
 import (
-	"github.com/zpratt/jig/adapters"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	utilsexec "k8s.io/utils/exec"
 	"log"
 	"os"
 	"os/exec"
 	"runtime"
+
+	"github.com/zpratt/jig/adapters"
+	"gopkg.in/yaml.v2"
+	utilsexec "k8s.io/utils/exec"
 )
 
 type JigConfig struct {
@@ -68,6 +69,9 @@ func desiredStateFactory() *DesiredState {
 	factories := map[string]func() *DesiredState{
 		"darwin": func() *DesiredState {
 			return &DesiredState{PlatformAdapter: adapters.NewDarwinAdapter(execInst)}
+		},
+		"linux": func() *DesiredState {
+			return &DesiredState{PlatformAdapter: adapters.NewLinuxAdapter(execInst)}
 		},
 		"windows": func() *DesiredState {
 			return &DesiredState{PlatformAdapter: adapters.NewWindowsAdapter(execInst)}
