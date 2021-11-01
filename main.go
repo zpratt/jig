@@ -1,6 +1,8 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -17,7 +19,10 @@ type JigConfig struct {
 }
 
 func main() {
-	desiredState := desiredStateFactory()
+	desiredState, err := desiredStateFactory()
+	if err != nil {
+		log.Fatal("Unable to load OS specific setup:\n", err.Error())
+	}
 	jigConfig := parseConfig()
 	notInstalled := findMissingPackages(jigConfig)
 
@@ -63,7 +68,7 @@ func parseConfig() JigConfig {
 	return config
 }
 
-func desiredStateFactory() *DesiredState {
+func desiredStateFactory() (*DesiredState, error) {
 	execInst := utilsexec.New()
 
 	factories := map[string]func() *DesiredState{
@@ -78,5 +83,9 @@ func desiredStateFactory() *DesiredState {
 		},
 	}
 
-	return factories[runtime.GOOS]()
+	if factory, ok := factories[runtime.GOOS]; ok {
+		return factory(), nil
+	} else {
+		return nil, errors.New(fmt.Sprint("Unsupported OS: ", runtime.GOOS))
+	}
 }
