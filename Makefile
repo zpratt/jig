@@ -1,4 +1,4 @@
-all: test build build-windows build-linux test-e2e
+all: test build build-darwin build-windows build-linux test-e2e test-release
 
 BREW_BIN ?= brew
 GO_BIN ?= go # in case you want to run some other version / containerize this run
@@ -11,16 +11,23 @@ TEST_PACKAGE=bat
 build: 
 	$(GO_BIN) build -a -v .
 
+.PHONY: build-darwin
+build-darwin:
+	GOOS=darwin GOARCH=amd64 go build -a
+
 .PHONY: build-windows
 build-windows:
 	GOOS=windows GOARCH=amd64 go build -a
 
 .PHONY: build-linux
-build-windows:
+build-linux:
 	GOOS=linux GOARCH=amd64 go build -a
 
 .PHONY: build-all
-build-all: build build-windows build-linux
+build-all: build build-darwin build-windows build-linux
+
+.PHONY: test-release
+test-release: goreleaser build --snapshot --rm-dist
 
 .PHONY: clean
 clean:
@@ -29,7 +36,7 @@ clean:
 
 .PHONY: test
 test: clean
-	$(GO_BIN) test -v ./...
+	$(GO_BIN) test -v -cover ./...
 
 .PHONY: test-e2e
 test-e2e: clean build
