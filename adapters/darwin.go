@@ -1,9 +1,10 @@
 package adapters
 
 import (
-	utilsexec "k8s.io/utils/exec"
 	"log"
 	"os/exec"
+
+	utilsexec "k8s.io/utils/exec"
 )
 
 type Darwin struct {
@@ -17,17 +18,19 @@ func NewDarwinAdapter(exec utilsexec.Interface) Darwin {
 }
 
 func (d Darwin) InstallPackage(packageName string) {
-	d.UpdatePackageList()
+	packageManager := "brew"
+	d.UpdatePackageList(packageManager)
+
 	log.Printf("installing package %s", packageName)
-	_, _ = d.exec.Command("brew", "install", packageName).CombinedOutput()
+	_, _ = d.exec.Command(packageManager, "install", packageName).CombinedOutput()
 	log.Printf("installed package %s", packageName)
 }
 
-func (d Darwin) UpdatePackageList() {
+func (d Darwin) UpdatePackageList(packageManager string) {
 	abortIfBrewIsNotInstalled()
 
 	log.Printf("updating package list")
-	exec.Command("brew", "update")
+	d.exec.Command(packageManager, "update")
 	log.Printf("finished updating package list")
 }
 

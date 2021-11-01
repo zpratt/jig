@@ -2,7 +2,6 @@ package adapters
 
 import (
 	"log"
-	"os/exec"
 
 	utilsexec "k8s.io/utils/exec"
 )
@@ -17,17 +16,19 @@ func NewLinuxAdapter(exec utilsexec.Interface) Linux {
 	}
 }
 
-func (d Linux) InstallPackage(packageName string) {
-	d.UpdatePackageList()
+func (l Linux) InstallPackage(packageName string) {
+	packageManager := "brew"
+	l.UpdatePackageList(packageManager)
+
 	log.Printf("installing package %s", packageName)
-	_, _ = d.exec.Command("brew", "install", packageName).CombinedOutput()
+	_, _ = l.exec.Command(packageManager, "install", packageName).CombinedOutput()
 	log.Printf("installed package %s", packageName)
 }
 
-func (Linux) UpdatePackageList() {
+func (l Linux) UpdatePackageList(packageManager string) {
 	abortIfBrewIsNotInstalled()
 
 	log.Printf("updating package list")
-	exec.Command("brew", "update")
+	l.exec.Command(packageManager, "update")
 	log.Printf("finished updating package list")
 }
